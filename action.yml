@@ -82,7 +82,7 @@ runs:
         options: ${{ inputs.options }}
     
     - name: Checkout repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         clean: ${{ inputs.clean_checkout }}
     
