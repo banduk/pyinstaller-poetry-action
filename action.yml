@@ -124,7 +124,9 @@ runs:
       if: inputs.poetry == 'true'
       shell: bash
       run: |
-        poetry run pyinstaller \
+        poetry shell
+
+        pyinstaller \
           --clean \
           --noconfirm \
           --dist ${{ inputs.exe_path }} \
