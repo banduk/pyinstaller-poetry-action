@@ -89,16 +89,16 @@ runs:
       with:
         clean: ${{ inputs.clean_checkout }}
     
-    - name: (Install) dependencies (requirements)
-      if: inputs.requirements != ''
-      run: python -m pip install -r "${{ inputs.requirements }}"
-      shell: bash
-
-    - name: (Install) dependencies (poetry)
+    - name: (Install) renerate requirements from poetry
       if: inputs.poetry == 'true'
       run: |
         python -m pip install poetry
-        poetry install --no-root
+        poetry export --without-hashes --format=requirements.txt > requirements.txt
+      shell: bash
+
+    - name: (Install) dependencies (requirements)
+      if: inputs.requirements != '' || inputs.poetry == 'true'
+      run: python -m pip install -r "${{ inputs.requirements }}"
       shell: bash
 
     - name: (Install) pyinstaller
@@ -106,26 +106,8 @@ runs:
       run: pip install pyinstaller${{ inputs.pyinstaller_ver }}
     
     - name: (Create) Executable
-      if: inputs.poetry != 'true'
       shell: bash
       run: |
-        pyinstaller \
-          --clean \
-          --noconfirm \
-          --dist ${{ inputs.exe_path }} \
-          ${{ steps.mods.outputs.supported_options }} \
-          "${{ inputs.spec }}"
-        
-        echo "✔️ Executable created successfully at _'${{ inputs.exe_path }}'_" >> $GITHUB_STEP_SUMMARY
-        echo "  - Python version used: '${{ inputs.python_ver }}'" >> $GITHUB_STEP_SUMMARY
-        echo "  - Python architecture used: '${{ inputs.python_arch }}'" >> $GITHUB_STEP_SUMMARY
-
-    - name: (Create) Executable with poetry
-      if: inputs.poetry == 'true'
-      shell: bash
-      run: |
-        poetry shell
-
         pyinstaller \
           --clean \
           --noconfirm \
