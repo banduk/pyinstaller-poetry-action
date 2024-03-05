@@ -98,7 +98,7 @@ runs:
       shell: bash
 
     - name: (Install) dependencies (requirements)
-      if: inputs.requirements != '' || inputs.poetry == 'true'
+      if: inputs.requirements != ''
       run: python -m pip install -r "${{ inputs.requirements }}"
       shell: bash
 
