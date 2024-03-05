@@ -17,6 +17,9 @@ inputs:
   requirements:
     description: path of your requirements.txt file
     default: ''
+  pyproject:
+    description: path of your pyproject.toml file
+    default: ''
   options:
     description: > 
       Options to set for pyinstaller command
@@ -86,9 +89,16 @@ runs:
       with:
         clean: ${{ inputs.clean_checkout }}
     
-    - name: (Install) dependencies
+    - name: (Install) dependencies (requirements)
       if: inputs.requirements != ''
       run: python -m pip install -r "${{ inputs.requirements }}"
+      shell: bash
+
+    - name: (Install) dependencies (pyproject)
+      if: inputs.pyproject != ''
+      run: |
+        python -m pip install poetry
+        poetry install "${{ inputs.pyproject }}"
       shell: bash
 
     - name: (Install) pyinstaller
