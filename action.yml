@@ -17,8 +17,8 @@ inputs:
   requirements:
     description: path of your requirements.txt file
     default: ''
-  pyproject:
-    description: path of your pyproject.toml file
+  poetry:
+    description: use poetry.lock or pyproject.toml to install dependencies
     default: ''
   options:
     description: > 
@@ -94,11 +94,11 @@ runs:
       run: python -m pip install -r "${{ inputs.requirements }}"
       shell: bash
 
-    - name: (Install) dependencies (pyproject)
-      if: inputs.pyproject != ''
+    - name: (Install) dependencies (poetry)
+      if: inputs.poetry != ''
       run: |
         python -m pip install poetry
-        poetry install "${{ inputs.pyproject }}"
+        poetry install --no-root
       shell: bash
 
     - name: (Install) pyinstaller
