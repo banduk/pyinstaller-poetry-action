@@ -95,7 +95,7 @@ runs:
       shell: bash
 
     - name: (Install) dependencies (poetry)
-      if: inputs.poetry = 'true'
+      if: inputs.poetry == 'true'
       run: |
         python -m pip install poetry
         poetry install --no-root
@@ -121,7 +121,7 @@ runs:
         echo "  - Python architecture used: '${{ inputs.python_arch }}'" >> $GITHUB_STEP_SUMMARY
 
     - name: (Create) Executable with poetry
-      if: inputs.poetry = 'true'
+      if: inputs.poetry == 'true'
       shell: bash
       run: |
         poetry run pyinstaller \
